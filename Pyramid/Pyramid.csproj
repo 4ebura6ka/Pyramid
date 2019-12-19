@@ -37,5 +37,8 @@
   <ItemGroup>
     <Content Include="sample.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sample2.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,7 +5,11 @@ namespace Pyramid
 {
     class MainClass
     {
-        private const string PATH = "/Users/serz/Projects/Pyramid/Pyramid/sample.txt";
+        private const string PATH = "/Users/serz/Projects/Pyramid/Pyramid/sample2.txt";
+
+        private static TreeNode treeNode;
+
+        private static int height;
 
         public static void Main(string[] args)
         {
@@ -18,6 +22,8 @@ namespace Pyramid
 
             int i = 0;
 
+            height = 0;
+
             using (StreamReader fileStream = File.OpenText(PATH))
             {
 
@@ -25,6 +31,8 @@ namespace Pyramid
                 {
                     string data = fileStream.ReadLine();
                     string[] nodes = data.Split(' ');
+
+                    height++;
 
                     foreach (var node in nodes)
                     {
@@ -39,17 +47,31 @@ namespace Pyramid
                 }
             }
 
-            for (var h = 1; h <= i; h++ )
-            {
-                Console.Write(integerNodes[h] + " ");
-            }
-
             Console.WriteLine();
+
+            TreeNode tn = CreateTree(integerNodes, 1, 1, i);
         }
 
-        public static void CreateTree (string[] nodes)
+        public static TreeNode CreateTree(int[] nodes, int ndx, int jump, int length)
         {
+            if (ndx + jump + 1 <= length)
+            {
+                Console.Write("Node: " + nodes[ndx] + " ");
+                Console.Write("Children 1: " + nodes[ndx + jump] + " ");
+                Console.Write("Children 2: " + nodes[ndx + jump + 1]);
 
+                Console.WriteLine();
+
+                treeNode = new TreeNode(nodes[ndx], CreateTree(nodes, ndx + jump, jump + 1, length), CreateTree(nodes, ndx + jump + 1, jump + 1, length));
+            }
+            else
+            {
+                treeNode = new TreeNode(nodes[ndx], null, null);
+
+                Console.WriteLine("NO CHILDREN: " + nodes[ndx]);
+            }
+
+            return treeNode;
         }
     }
 }
