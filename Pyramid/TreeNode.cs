@@ -5,38 +5,31 @@ namespace Pyramid
 {
     public class TreeNode
     {
-		public int Number { private set; get; }
+		public int Number { get; private set; }
 
-		private bool hasParent;
+        private TreeNode leftNode;
 
-		private List<TreeNode> children;
+        private TreeNode rightNode;
 
         public TreeNode(int number)
         {
-            if (number == null)
+            if (number <= 0)
 			{
-				throw new ArgumentNullException("Cannot insert null");
+				throw new ArgumentNullException("Cannot insert negative or 0");
 			}
 
 			Number = number;
-			this.children = new List<TreeNode>();
         }
 
-        public void AddChild(TreeNode node)
-		{
-            if (node == null)
-			{
-				throw new ArgumentNullException("Cannot insert null");
-			}
+        public void AddChild(TreeNode left, TreeNode right)
+        {
+            if (left == null || right == null)
+            {
+                throw new ArgumentNullException("Cannot insert null");
+            }
 
-			node.hasParent = true;
-			children.Add(node);
-		}
-
-        public TreeNode GetChild(int index)
-		{
-			return children[index];
-		}
-        
+            leftNode = left;
+            rightNode = right;
+        }
     }
 }
