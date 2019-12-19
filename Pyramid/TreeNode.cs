@@ -11,12 +11,15 @@ namespace Pyramid
 
         private TreeNode rightNode;
 
-        public TreeNode(int number)
+        public TreeNode(int number, TreeNode left, TreeNode right)
         {
             if (number <= 0)
 			{
 				throw new ArgumentNullException("Cannot insert negative or 0");
 			}
+
+            leftNode = left;
+            rightNode = right;
 
 			Number = number;
         }
