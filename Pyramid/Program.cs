@@ -49,56 +49,57 @@ namespace Pyramid
 
             Console.WriteLine();
 
-            TreeNode tn = CreateTree(integerNodes, 1, 1, i);
+            TreeNode tn = CreateTree(integerNodes, 1, 1, i, 0);
         }
 
-        public static TreeNode CreateTree(int[] nodes, int ndx, int jump, int length)
+        public static TreeNode CreateTree(int[] nodes, int ndx, int jump, int length, int sum)
         {
-            int rightChildIndex = ndx + jump + 1;
             int leftChildIndex = ndx + jump;
+            int rightChildIndex = leftChildIndex + 1;
             TreeNode leftChild = null;
             TreeNode rightChild = null;
 
+            sum += nodes[ndx];
+
             if (rightChildIndex <= length)
             {
+                Console.Write(nodes[ndx] + "->");
+
                 if (nodes[ndx] % 2 == 0)
                 {
                     if (nodes[leftChildIndex] % 2 != 0)
                     {
-                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length);
+                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length, sum);
                     }
 
                     if (nodes[rightChildIndex] % 2 != 0)
                     {
-                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length);
+                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length, sum);
                     }
                 }
                 else
                 {
                     if (nodes[leftChildIndex] % 2 == 0)
                     {
-                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length);
+                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length, sum);
                     }
 
                     if (nodes[rightChildIndex] % 2 == 0)
                     {
-                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length);
+                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length, sum);
                     }
                 }
 
                 treeNode = new TreeNode(nodes[ndx], leftChild, rightChild);
-
-                Console.Write("Node: " + nodes[ndx] + " ");
-                Console.Write("Children 1: " + leftChild?.Number + " ");
-                Console.WriteLine("Children 2: " + rightChild?.Number);
-                Console.WriteLine();
             }
             else
             {
                 treeNode = new TreeNode(nodes[ndx], null, null);
 
-                Console.WriteLine("NO CHILDREN: " + nodes[ndx]);
+                Console.WriteLine(nodes[ndx]);
+                Console.WriteLine("Tree sum: " + sum);
             }
+
 
             return treeNode;
         }
