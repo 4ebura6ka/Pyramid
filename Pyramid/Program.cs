@@ -42,7 +42,7 @@ namespace Pyramid
                             throw new InvalidDataException("Issue with converting to integer");
                         }
 
-                        Console.Write(node + " ");
+                      //  Console.Write(node + " ");
                     }
                 }
             }
@@ -54,15 +54,44 @@ namespace Pyramid
 
         public static TreeNode CreateTree(int[] nodes, int ndx, int jump, int length)
         {
-            if (ndx + jump + 1 <= length)
+            int rightChildIndex = ndx + jump + 1;
+            int leftChildIndex = ndx + jump;
+            TreeNode leftChild = null;
+            TreeNode rightChild = null;
+
+            if (rightChildIndex <= length)
             {
+                if (nodes[ndx] % 2 == 0)
+                {
+                    if (nodes[leftChildIndex] % 2 != 0)
+                    {
+                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length);
+                    }
+
+                    if (nodes[rightChildIndex] % 2 != 0)
+                    {
+                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length);
+                    }
+                }
+                else
+                {
+                    if (nodes[leftChildIndex] % 2 == 0)
+                    {
+                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length);
+                    }
+
+                    if (nodes[rightChildIndex] % 2 == 0)
+                    {
+                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length);
+                    }
+                }
+
+                treeNode = new TreeNode(nodes[ndx], leftChild, rightChild);
+
                 Console.Write("Node: " + nodes[ndx] + " ");
-                Console.Write("Children 1: " + nodes[ndx + jump] + " ");
-                Console.Write("Children 2: " + nodes[ndx + jump + 1]);
-
+                Console.Write("Children 1: " + leftChild?.Number + " ");
+                Console.WriteLine("Children 2: " + rightChild?.Number);
                 Console.WriteLine();
-
-                treeNode = new TreeNode(nodes[ndx], CreateTree(nodes, ndx + jump, jump + 1, length), CreateTree(nodes, ndx + jump + 1, jump + 1, length));
             }
             else
             {
