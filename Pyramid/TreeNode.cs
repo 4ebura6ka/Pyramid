@@ -1,38 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-
+ 
 namespace Pyramid
 {
     public class TreeNode
     {
 		public int Number { get; private set; }
 
-        private TreeNode leftNode;
+        public TreeNode LeftNode { get; private set; }
 
-        private TreeNode rightNode;
+        public TreeNode RightNode { get; private set; }
 
-        public TreeNode(int number, TreeNode left, TreeNode right)
+        public TreeNode(int number, TreeNode leftNode, TreeNode rightNode)
         {
             if (number <= 0)
 			{
 				throw new ArgumentNullException("Cannot insert negative or 0");
 			}
 
-            leftNode = left;
-            rightNode = right;
+            LeftNode = leftNode;
+            RightNode = rightNode;
 
 			Number = number;
-        }
-
-        public void AddChild(TreeNode left, TreeNode right)
-        {
-            if (left == null || right == null)
-            {
-                throw new ArgumentNullException("Cannot insert null");
-            }
-
-            leftNode = left;
-            rightNode = right;
         }
     }
 }
