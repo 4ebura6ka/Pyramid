@@ -71,7 +71,7 @@ namespace Pyramid
 
 #if DEBUG
                 Console.WriteLine("Tree sum: " + sum);
-                Console.WriteLine(path);
+                Console.WriteLine("Path: " + path);
 #endif
             }
 

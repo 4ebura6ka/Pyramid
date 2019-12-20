@@ -23,7 +23,6 @@ namespace Pyramid
             }
 
             List<int> integerNodes = new List<int>();
-
             int length = 0;
 
             using (StreamReader fileStream = File.OpenText(filePath))
