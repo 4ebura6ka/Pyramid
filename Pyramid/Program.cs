@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Pyramid
 {
@@ -21,12 +22,13 @@ namespace Pyramid
                 throw new FileNotFoundException("Data file not found");
             }
 
-            int[] integerNodes = new int[100000];
+            List<int> integerNodes = new List<int>();
 
             int length = 0;
 
             using (StreamReader fileStream = File.OpenText(filePath))
             {
+                int intNode = 0;
 
                 while (!fileStream.EndOfStream)
                 {
@@ -36,16 +38,18 @@ namespace Pyramid
                     foreach (var node in nodes)
                     {
                         length++;
-                        if (!int.TryParse(node, out integerNodes[length]))
+                        if (!int.TryParse(node, out intNode))
                         {
                             throw new InvalidDataException("Issue with converting to integer");
                         }
+
+                        integerNodes.Add(intNode);
                     }
                 }
             }
 
             Tree tree = new Tree();
-            tree.CreateTree(integerNodes, 1, 1, length, 0, string.Empty);
+            tree.CreateTree(integerNodes, 0, 1, length, 0, string.Empty);
 
             Console.WriteLine("Max sum: " + tree.MaxSum + "\nPath: " + tree.MaxSumPath);
         }

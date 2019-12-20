@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Pyramid
 {
@@ -16,7 +17,7 @@ namespace Pyramid
             MaxSum = 0;
         }
 
-        public TreeNode CreateTree(int[] nodes, int ndx, int jump, int length, int sum, string path)
+        public TreeNode CreateTree(List<int> nodes, int ndx, int jump, int length, int sum, string path)
         {
             int leftChildIndex = ndx + jump;
             int rightChildIndex = leftChildIndex + 1;
