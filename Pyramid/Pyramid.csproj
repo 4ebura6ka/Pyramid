@@ -36,7 +36,7 @@
     <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="sample.txt" />
+    <Content Include="sample1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sample2.txt" />
