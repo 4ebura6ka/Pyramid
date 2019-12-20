@@ -5,11 +5,18 @@ namespace Pyramid
 {
     class MainClass
     {
-        private const string PATH = "/Users/serz/Projects/Pyramid/Pyramid/sample2.txt";
+        private static string filePath; 
 
         public static void Main(string[] args)
         {
-            if (!File.Exists(PATH))
+            if (args.Length <= 0)
+            {
+                throw new ArgumentException("Path not specified");
+            }
+
+            filePath = args[0];
+
+            if (!File.Exists(filePath))
             {
                 throw new FileNotFoundException("Data file not found");
             }
@@ -18,7 +25,7 @@ namespace Pyramid
 
             int length = 0;
 
-            using (StreamReader fileStream = File.OpenText(PATH))
+            using (StreamReader fileStream = File.OpenText(filePath))
             {
 
                 while (!fileStream.EndOfStream)
@@ -37,7 +44,10 @@ namespace Pyramid
                 }
             }
 
-            TreeNode tn = new Tree().CreateTree(integerNodes, 1, 1, length, 0);
+            Tree tree = new Tree();
+            tree.CreateTree(integerNodes, 1, 1, length, 0, string.Empty);
+
+            Console.WriteLine("Max sum: " + tree.MaxSum + "\nPath: " + tree.MaxSumPath);
         }
     }
 }
