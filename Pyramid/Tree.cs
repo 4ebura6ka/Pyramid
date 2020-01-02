@@ -7,17 +7,28 @@ namespace Pyramid
     {
         private TreeNode treeNode;
 
+        private List<int> nodes;
+
+        private int length;
+
         public string MaxSumPath { get; private set; }
 
         public int MaxSum { get; private set; }
 
-        public Tree()
+        public Tree(List<int> nodes)
         {
             MaxSumPath = string.Empty;
             MaxSum = 0;
+            length = nodes.Count;
+            this.nodes = nodes;
         }
 
-        public TreeNode CreateTree(List<int> nodes, int ndx, int jump, int length, int sum, string path)
+        public void ConstructPaths()
+        {
+            ConstructPaths(0, 1, 0, string.Empty);
+        }
+
+        private TreeNode ConstructPaths(int ndx, int jump, int sum, string path)
         {
             int leftChildIndex = ndx + jump;
             int rightChildIndex = leftChildIndex + 1;
@@ -29,30 +40,34 @@ namespace Pyramid
 
             if (rightChildIndex <= length)
             {
+
+                bool leftChildIsEven = nodes[leftChildIndex] % 2 != 0;
+                bool rightChildIsEven = nodes[rightChildIndex] % 2 != 0;
+
                 path += nodes[ndx] + ", ";
 
                 if (nodes[ndx] % 2 == 0)
                 {
-                    if (nodes[leftChildIndex] % 2 != 0)
+                    if (leftChildIsEven)
                     {
-                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length, sum, path);
+                        leftChild = ConstructPaths(leftChildIndex, jump + 1, sum, path);
                     }
 
-                    if (nodes[rightChildIndex] % 2 != 0)
+                    if (rightChildIsEven)
                     {
-                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length, sum, path);
+                        rightChild = ConstructPaths(rightChildIndex, jump + 1, sum, path);
                     }
                 }
                 else
                 {
-                    if (nodes[leftChildIndex] % 2 == 0)
+                    if (!leftChildIsEven)
                     {
-                        leftChild = CreateTree(nodes, leftChildIndex, jump + 1, length, sum, path);
+                        leftChild = ConstructPaths(leftChildIndex, jump + 1, sum, path);
                     }
 
-                    if (nodes[rightChildIndex] % 2 == 0)
+                    if (!rightChildIsEven)
                     {
-                        rightChild = CreateTree(nodes, rightChildIndex, jump + 1, length, sum, path);
+                        rightChild = ConstructPaths(rightChildIndex, jump + 1, sum, path);
                     }
                 }
 
@@ -61,6 +76,7 @@ namespace Pyramid
             else
             {
                 path += nodes[ndx];
+                
                 treeNode = new TreeNode(nodes[ndx], null, null);
 
                 if (sum > MaxSum)
@@ -68,11 +84,6 @@ namespace Pyramid
                     MaxSumPath = path;
                     MaxSum = sum;
                 }
-
-#if DEBUG
-                Console.WriteLine("Tree sum: " + sum);
-                Console.WriteLine("Path: " + path);
-#endif
             }
 
             return treeNode;
