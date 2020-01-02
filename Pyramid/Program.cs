@@ -22,33 +22,10 @@ namespace Pyramid
                 throw new FileNotFoundException("Data file not found");
             }
 
-            List<int> integerNodes = new List<int>();
-            int length = 0;
-
-            using (StreamReader fileStream = File.OpenText(filePath))
-            {
-                int intNode = 0;
-
-                while (!fileStream.EndOfStream)
-                {
-                    string data = fileStream.ReadLine();
-                    string[] nodes = data.Split(' ');
-
-                    foreach (var node in nodes)
-                    {
-                        length++;
-                        if (!int.TryParse(node, out intNode))
-                        {
-                            throw new InvalidDataException("Issue with converting to integer");
-                        }
-
-                        integerNodes.Add(intNode);
-                    }
-                }
-            }
-
+            List<int> integerNodes = new FileOperations().ReadFile(filePath);
+            
             Tree tree = new Tree();
-            tree.CreateTree(integerNodes, 0, 1, length, 0, string.Empty);
+            tree.CreateTree(integerNodes, 0, 1, integerNodes.Count, 0, string.Empty);
 
             Console.WriteLine("Max sum: " + tree.MaxSum + "\nPath: " + tree.MaxSumPath);
         }
