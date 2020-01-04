@@ -25,10 +25,10 @@ namespace Pyramid
             FileOperations fileOperations = new FileOperations();
             List<List<int>> pyramid = fileOperations.ReadFile(filePath);
 
-            Tree tree = new Tree(pyramid, fileOperations.FileLinesCount);
-            tree.CalculatePath();
+            PyramidComputations pyramidComputatons = new PyramidComputations(pyramid, fileOperations.FileLinesCount);
+            pyramidComputatons.CalculateMaxSumAndPath();
 
-            Console.WriteLine("Max sum: " + tree.MaxSum + "\nPath: " + tree.MaxSumPath);
+            Console.WriteLine("Max sum: " + pyramidComputatons.MaxSum + "\nPath: " + pyramidComputatons.MaxSumPath);
         }
     }
 }
