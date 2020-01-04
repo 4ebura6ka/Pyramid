@@ -22,10 +22,11 @@ namespace Pyramid
                 throw new FileNotFoundException("Data file not found");
             }
 
-            List<int> nodes = new FileOperations().ReadFile(filePath);
+            FileOperations fileOperations = new FileOperations();
+            List<List<int>> pyramid = fileOperations.ReadFile(filePath);
 
-            Tree tree = new Tree(nodes);
-            tree.ConstructPaths();
+            Tree tree = new Tree(pyramid, fileOperations.FileLinesCount);
+            tree.CalculatePath();
 
             Console.WriteLine("Max sum: " + tree.MaxSum + "\nPath: " + tree.MaxSumPath);
         }

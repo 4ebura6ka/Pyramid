@@ -10,9 +10,11 @@ namespace Pyramid
         {
         }
 
-        public List<int> ReadFile(string path)
+        public int FileLinesCount { get; private set; }
+
+        public List<List<int>> ReadFile(string path)
         {
-            List<int> nodes = new List<int>();
+            List<List<int>> pyramid = new List<List<int>>();
 
             using (StreamReader fileStream = File.OpenText(path))
             {
@@ -20,9 +22,12 @@ namespace Pyramid
 
                 while (!fileStream.EndOfStream)
                 {
+                    FileLinesCount++;
+
                     string data = fileStream.ReadLine();
                     string[] separatedData = data.Split(' ');
 
+                    List<int> nodes = new List<int>();
                     foreach (var node in separatedData)
                     {
                         if (!int.TryParse(node, out intNode))
@@ -32,10 +37,12 @@ namespace Pyramid
 
                         nodes.Add(intNode);
                     }
+
+                    pyramid.Add(nodes);
                 }
             }
 
-            return nodes;
+            return pyramid;
         }
     }
 }

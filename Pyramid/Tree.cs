@@ -5,88 +5,73 @@ namespace Pyramid
 {
     public class Tree
     {
-        private TreeNode treeNode;
+        private List<List<int>> pyramid;
 
-        private List<int> nodes;
+        private TreeNode node;
 
-        private int length;
+        public TreeNode Root { get; private set; }
+
+        public int Height { get; private set; }
 
         public string MaxSumPath { get; private set; }
 
         public int MaxSum { get; private set; }
 
-        public Tree(List<int> nodes)
+        public Tree(List<List<int>> pyramid, int height)
         {
             MaxSumPath = string.Empty;
             MaxSum = 0;
-            length = nodes.Count;
-            this.nodes = nodes;
+
+            Height = height;
+            this.pyramid = pyramid;
+
+            if (height < 1)
+            {
+                throw new ArgumentOutOfRangeException("Tree at least should contain a root");
+            }
         }
 
-        public void ConstructPaths()
+        public void CalculatePath()
         {
-            ConstructPaths(0, 1, 0, string.Empty);
-        }
+            List<int> sumsInCurrentRow = new List<int>(pyramid[Height - 1]);
 
-        private TreeNode ConstructPaths(int ndx, int jump, int sum, string path)
-        {
-            int leftChildIndex = ndx + jump;
-            int rightChildIndex = leftChildIndex + 1;
-
-            TreeNode leftChild = null;
-            TreeNode rightChild = null;
-
-            sum += nodes[ndx];
-
-            if (rightChildIndex <= length)
+            for (var row = Height - 1; row > 0; row --)
             {
+                List<int> sumsInNextRow = new List<int>();
 
-                bool leftChildIsEven = nodes[leftChildIndex] % 2 != 0;
-                bool rightChildIsEven = nodes[rightChildIndex] % 2 != 0;
-
-                path += nodes[ndx] + ", ";
-
-                if (nodes[ndx] % 2 == 0)
+                foreach (var s in sumsInCurrentRow)
                 {
-                    if (leftChildIsEven)
-                    {
-                        leftChild = ConstructPaths(leftChildIndex, jump + 1, sum, path);
-                    }
-
-                    if (rightChildIsEven)
-                    {
-                        rightChild = ConstructPaths(rightChildIndex, jump + 1, sum, path);
-                    }
+                    Console.Write(s + " ");
                 }
-                else
+                Console.WriteLine();
+
+                List<int> children = pyramid[row];
+                int rowSize = pyramid[row - 1].Count;
+
+                for (var i = 0; i < rowSize; i++)
                 {
-                    if (!leftChildIsEven)
+                    int parent = pyramid[row - 1][i];
+                    int leftChild = children[i];
+                    int rightChild = children[i + 1];
+
+                    int leftChildSum = 0;
+                    int rightChildSum = 0;
+
+                    if (parent % 2 == 0 ^ leftChild % 2 == 0)
                     {
-                        leftChild = ConstructPaths(leftChildIndex, jump + 1, sum, path);
+                        leftChildSum = sumsInCurrentRow[i] + parent;
                     }
 
-                    if (!rightChildIsEven)
+                    if (parent % 2 == 0 ^ rightChild % 2 == 0)
                     {
-                        rightChild = ConstructPaths(rightChildIndex, jump + 1, sum, path);
+                        rightChildSum = sumsInCurrentRow[i + 1] + parent;
                     }
+
+                    sumsInNextRow.Add(Math.Max(leftChildSum, rightChildSum));
                 }
 
-                treeNode = new TreeNode(nodes[ndx], leftChild, rightChild);
+                sumsInCurrentRow = new List<int>(sumsInNextRow);
             }
-            else
-            {
-                path += nodes[ndx];
-                
-                treeNode = new TreeNode(nodes[ndx], null, null);
-
-                if (sum > MaxSum)
-                {
-                    MaxSumPath = path;
-                    MaxSum = sum;
-                }
-            }
-
-            return treeNode;
         }
     }
 }
