@@ -35,46 +35,48 @@ namespace Pyramid
             // record indexes of nodes we came
             List<List<int>> pathInPyramid = new List<List<int>>();
 
-            for (var rowIndex = Height - 1; rowIndex > 0; rowIndex--)
+            for (var childrenRowIndex = Height - 1; childrenRowIndex > 0; childrenRowIndex--)
             {
                 List<int> sumsNextRow = new List<int>();
                 List<int> pathRow = new List<int>();
-                List<int> children = Pyramid[rowIndex];
+                List<int> children = Pyramid[childrenRowIndex];
 
-                int rowSize = Pyramid[rowIndex - 1].Count;
+                int rowSize = Pyramid[childrenRowIndex - 1].Count;
+                int parentRowIndex = childrenRowIndex - 1;
 
                 // calculate sums in parent row
-                for (var i = 0; i < rowSize; i++)
+                for (var leftChildIndex = 0; leftChildIndex < rowSize; leftChildIndex++)
                 {
-                    int parent = Pyramid[rowIndex - 1][i];
-                    int leftChild = children[i];
-                    int rightChild = children[i + 1];
+                    int parent = Pyramid[parentRowIndex][leftChildIndex];
+                    int leftChild = children[leftChildIndex];
+                    int rightChildIndex = leftChildIndex + 1;
+                    int rightChild = children[rightChildIndex];
 
                     // if node doesn't satisfied odd/even condition it will be not included by setting most minimal value
                     int leftChildSum = Int32.MinValue;
                     int rightChildSum = Int32.MinValue;
 
                     // checking the path creation condition
-                    if (parent % 2 == 0 ^ leftChild % 2 == 0)
+                    if ((parent + leftChild) % 2 == 1)
                     {
-                        leftChildSum = sumsCurrentRow[i] + parent;
+                        leftChildSum = sumsCurrentRow[leftChildIndex] + parent;
                     }
 
-                    if (parent % 2 == 0 ^ rightChild % 2 == 0)
+                    if ((parent + rightChild) % 2 == 1)
                     {
-                        rightChildSum = sumsCurrentRow[i + 1] + parent;
+                        rightChildSum = sumsCurrentRow[rightChildIndex] + parent;
                     }
 
                     //choose max from two childs
                     if (leftChildSum < rightChildSum)
                     {
                         sumsNextRow.Add(rightChildSum);
-                        pathRow.Add(i + 1);
+                        pathRow.Add(rightChildIndex);
                     }
                     else
                     {
                         sumsNextRow.Add(leftChildSum);
-                        pathRow.Add(i);
+                        pathRow.Add(leftChildIndex);
                     }
                 }
 
@@ -87,7 +89,7 @@ namespace Pyramid
 
         private void RestorePath(List<int> sumsCurrentRow, List<List<int>> pathInPyramid)
         {
-            int level = 0;
+            int pyramidLevel = 0;
             int pathPyramidHeight = pathInPyramid.Count;
             int pathIndex = pathInPyramid[pathPyramidHeight - 1][0];
 
@@ -95,14 +97,14 @@ namespace Pyramid
             if (pathPyramidHeight == Height - 1)
             {
                 MaxSumPath += Pyramid[0][0];
-                for (var ndx = pathPyramidHeight - 1; ndx >= 0; ndx--)
+                for (var level = pathPyramidHeight - 1; level >= 0; level--)
                 {
                     MaxSumPath += "->";
                     //extract next index in path pyramid
-                    pathIndex = pathInPyramid[ndx][pathIndex];
-                    level++;
+                    pathIndex = pathInPyramid[level][pathIndex];
+                    pyramidLevel++;
 
-                    MaxSumPath += Pyramid[level][pathIndex];
+                    MaxSumPath += Pyramid[pyramidLevel][pathIndex];
                 }
 
                 MaxSum = sumsCurrentRow[0];
